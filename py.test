@@ -1,4 +1,4 @@
 from test import *
 
 mytests = MyTestCase
-mytests.test_something()
+mytests.test_something
