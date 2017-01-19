@@ -1,0 +1,5 @@
+machine:
+  timezone:
+    America/Sao_Paulo
+  python:
+    version: 3.4.0
