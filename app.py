@@ -3,6 +3,7 @@ from flask import Flask, request
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 from handlers import categorias, locais, usuarios, votacao
 from logging.handlers import RotatingFileHandler
+from dal.database import db_session
 
 app = Flask(__name__)
 json = FlaskJSON(app)
@@ -38,6 +39,10 @@ def getcategoria():
 def delcategoria():
     negocio = categorias
     return negocio
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 if __name__ == '__main__':
     formatter = logging.Formatter("[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
