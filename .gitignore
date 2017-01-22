@@ -1,7 +1,4 @@
-bin/
-include/
-lib/
+env/
 pip-selfcheck.json
 __pycache__
 .idea/
-logerrors.log
