@@ -1,9 +1,8 @@
-import logging
-from flask import Flask, request
-from flask_json import FlaskJSON, JsonError, json_response, as_json
-from handlers import categorias, locais, usuarios, votacao
-from logging.handlers import RotatingFileHandler
-from dal.database import db_session
+from flask import Flask
+from flask_json import FlaskJSON, json_response
+from database import db_session
+from handlers.categorias import HandleCategoria
+from models import ModelCategoria
 
 app = Flask(__name__)
 json = FlaskJSON(app)
@@ -11,25 +10,22 @@ json = FlaskJSON(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def root():
-    return json_response(status=200, mensagem='API tcguaruja')
+    return json_response(status=200, message='API tcguaruja')
 
-@app.errorhandler(404)
-def page_not_found():
-    return 'Page not Found'
-
-
-@app.route('/categoria/v1.0/add', methods=['POST'])
-def addcategoria():
-    negocio = categorias
-    return negocio
+@app.route('/categoria/v1.0/add/<cat>', methods=['GET','POST'])
+def addcategoria(cat):
+    c = ModelCategoria(cat)
+    control = HandleCategoria()
+    negocio = control.add(c)
+    return json_response(status = 200, message = negocio)
 
 
 @app.route('/categoria/v1.0/getlist', methods=['GET'])
 def getcategorias():
-    negocio = categorias
+    negocio = ModelCategoria.query.all()
     return negocio
 
-
+'''
 @app.route('/categoria/v1.0/get', methods=['GET'])
 def getcategoria():
     negocio = categorias
@@ -39,14 +35,10 @@ def getcategoria():
 def delcategoria():
     negocio = categorias
     return negocio
-
+'''
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
 
 if __name__ == '__main__':
-    formatter = logging.Formatter("[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
-    managerror = RotatingFileHandler('logerrors.log', maxBytes=10000000, backupCount=5)
-    managerror.setLevel(logging.INFO)
-    app.logger.addHandler(managerror)
     app.run(host='127.0.0.1', port=5000, debug=True)

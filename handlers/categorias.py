@@ -1,10 +1,18 @@
+from database import db_session
 
+class HandleCategoria(object):
+    def add(self, newcategoria):
+        try:
+            db_session.add(newcategoria)
+            db_session.commit()
+        except(ValueError):
+            pass
+        finally:
+            return 'Cadastro efetuado com sucesso'
 
-class Categoria(object):
-    """ Representa metodos de uma categorias"""
-    def __init__(self, arg):
-        super(Categoria, self).__init__()
-        self.arg = arg
-
-    def addcategoria():
-        pass
+    def list(self):
+        try:
+            categorias = db_session.query.all()
+            return categorias
+        except(ValueError):
+            pass
