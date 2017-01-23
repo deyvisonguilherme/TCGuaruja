@@ -1,7 +1,7 @@
-from api.dal.configuration import setconnfig
+from dal.configuration import setconnfig
 
 class categoriaDAL(object):
-    def add(self, newcategoria=None):
+    def add(self, newcategr):
         conn = setconnfig()
         try:
             insert_categoria = conn.proc('insert_categoria(varchar)')
